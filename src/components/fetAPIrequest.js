@@ -30,10 +30,22 @@ export const FetchPutRequest = async (data) =>{
   return resJson;
 };
 
-// export const FetchGetRequest = async () =>{
-//   const response = await fetch('https://api.openweathermap.org/data/2.5/weather?lat=44.34&lon=10.99&appid={API key}', {
-//       method: 'GET',
-//   });
-// const resJson = await response.json();
-// return resJson;
-// };
+export const FetchPatchRequest = async (id ,data) =>{
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts/1' +id, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+  });
+const resJson = await response.json();
+return resJson;
+};
+
+export const DeleteRequest = async (id ) =>{
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts/1' +id, {
+      method: 'DELETE',
+  });
+const resJson = await response.json();
+return resJson;
+};

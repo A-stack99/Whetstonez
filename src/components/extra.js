@@ -1,27 +1,54 @@
-import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, Button, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import WeatherDisplay from '../components/WeatherDisplay';
+import BackgroundImage from '../components/BackgroundImage';
+import { FetchGetRequest } from '../components/fetAPIrequest';
 
-const WeatherButtons = ({ weather, postWeatherData, putWeatherData, deleteWeatherData }) => {
+const WeatherApp = ({ navigation }) => {
+  const [city, setCity] = useState('New York');
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    getWeather(); 
+  }, []); 
+
+  const getWeather = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await FetchGetRequest(city); // Ensure city is passed to the request
+      setWeather(res); 
+    } catch (err) {
+      setError('Failed to fetch weather data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View style={styles.buttonContainer}>
-      <Button title="Save Weather Data" onPress={() => postWeatherData(weather)} style={styles.button} />
-      {weather && <Button title="Update Weather Data" onPress={() => putWeatherData(weather)} style={styles.button} />}
-      {weather && <Button title="Delete Weather Data" onPress={() => deleteWeatherData(weather.id)} style={styles.button} />}
-    </View>
+    <BackgroundImage condition={weather?.weather[0]?.main || 'Default'}>
+      <View style={styles.container}>
+        <TextInput
+          value={city}
+          onChangeText={setCity}
+          placeholder="Enter city"
+          style={styles.input}
+        />
+        <Button title="Get Weather" onPress={getWeather} />
+        {loading && <ActivityIndicator size="large" color="blue" />}
+        {error && <Text style={styles.error}>{error}</Text>}
+        <WeatherDisplay weather={weather} />
+      </View>
+    </BackgroundImage>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: 'column', // Makes buttons stack vertically
-    justifyContent: 'center', // Centers buttons vertically in the container
-    alignItems: 'center', // Centers buttons horizontally in the container
-    margin: 10, // Adjusts margin for overall spacing
-  },
-  button: {
-    width: '80%', // Controls button width (you can tweak this)
-    marginBottom: 10, // Adds space between buttons
-  },
+  container: { padding: 30, backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 10, width: '90%', height: '60%' },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  error: { color: 'red', marginTop: 10 },
 });
 
-export default WeatherButtons;
+export default WeatherApp;
