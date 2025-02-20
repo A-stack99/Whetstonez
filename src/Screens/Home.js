@@ -1,42 +1,53 @@
-import { View, Text , Button , TouchableOpacity , StyleSheet} from 'react-native'
-import React from 'react'
+import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet
+} from 'react-native';
+import Header from '../Components/Home/Header';
+import BookContainer from '../Components/Home/BookContainer';
+import ServicesList from '../Components/Home/ServicesList';
+import ServiceItem from '../Components/Home/ServiceItem';
 
-
-const Home = ({navigation}) => {
+const HomeScreen = () => {
   return (
-    <View>
-     <View>
-        <Text>Welcome to the Home Screen</Text>
-            <TouchableOpacity 
-                  style={styles.button} 
-                  onPress={() => navigation.navigate('Counter')}
-                >
-                  <Text style={styles.buttonText}>Go On Counter</Text>
-                </TouchableOpacity>
-     </View>
-    </View>
-  )
-}
+    <View style={styles.container}>
+      <Header/>
 
-export default Home;
+      <ScrollView>
+        <BookContainer/>
+        <ServicesList/>
+
+        <ServiceItem/>
+      </ScrollView>
+
+      
+        <View
+          style={{
+            height: 4,
+            backgroundColor: '#000',
+            marginBottom: 10,
+            borderRadius: 1,
+            width: '30%',
+            alignSelf: 'center',
+            bottom: 10,
+          }}
+        />
+      
+    </View>
+  );
+};
+
+export default HomeScreen;
+
 
 const styles = StyleSheet.create({
-    button:{
-        backgroundColor: 'gray',
-        color: 'white',
-        paddingVertical: 12,
-        paddingHorizontal:20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        marginBottom: 10,
-        width: '90%',
-        height: 50,
-        alignSelf: 'center',
+    container:{
+        flex: 1,
         },
-        buttonText:{
-          fontSize: 16,
-          fontWeight: 'bold',
-          color: '#fff',
-        }
-})
+  
+});
