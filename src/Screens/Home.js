@@ -1,53 +1,49 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet
-} from 'react-native';
+import { View, StatusBar } from 'react-native';
 import Header from '../Components/Home/Header';
 import BookContainer from '../Components/Home/BookContainer';
-import ServicesList from '../Components/Home/ServicesList';
 import ServiceItem from '../Components/Home/ServiceItem';
+import Bottom from '../Components/Home/Bottom';
+import CustomStatusBar from '../Components/StatusBar';
 
-const HomeScreen = () => {
+const Home = ({ navogation }) => {
   return (
     <View style={styles.container}>
-      <Header/>
-
-      <ScrollView>
-        <BookContainer/>
-        <ServicesList/>
-
-        <ServiceItem/>
-      </ScrollView>
-
-      
-        <View
-          style={{
-            height: 4,
-            backgroundColor: '#000',
-            marginBottom: 10,
-            borderRadius: 1,
-            width: '30%',
-            alignSelf: 'center',
-            bottom: 10,
-          }}
+         <CustomStatusBar 
+          backgroundColor="#FFFFFF"  
+          barStyle="dark-content"    
         />
-      
+      <Header style={styles.locationHeader} />
+      <BookContainer style={styles.mainContent} />
+        <ServiceItem style={styles.salonPreviewCard} />
+      <Bottom style={styles.bottom} />
+        
     </View>
   );
 };
 
-export default HomeScreen;
-
-
-const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        },
+const styles = {
+  container: {
+    flex: 1,
+    minHeight: '100vh',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    // paddingHorizontal: 8,
+  },
   
-});
+  mainContent: {
+    // flexGrow: 1,
+    width: '100%',
+    // height: 'auto',
+    padding:10,
+   
+    
+  },
+ 
+
+ 
+};
+
+export default Home;

@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
-import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import { View, StatusBar, Image, StyleSheet} from "react-native";
+import CustomStatusBar from "../Components/StatusBar";
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace("SignIn");
-    }, 2000); 
+    }, 3000); 
   }, []);
 
   return (
     <View colors={["#3377FF", "#005AFF"]} style={styles.container}>
+       <CustomStatusBar 
+          backgroundColor="transparent"  
+          barStyle="light-content"    
+        />
       <Image source={require("../assests/Images/splashLogo.png")} style={styles.logo} />
     </View>
   );

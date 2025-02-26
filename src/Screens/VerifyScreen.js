@@ -1,44 +1,61 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet , StatusBar } from "react-native";
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import CustomStatusBar from '../Components/StatusBar';
+import Button from '../Components/CustomButton';
+const VerifyScreen = ({ phoneNumber = "071***05", onResend = () => {} , navigation }) => {
+  const [code, setCode] = useState(['', '', '', '']);
 
-const VerificationOTP = ({navigation}) => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
-
-  const handleChange = (value, index) => {
-    let newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+  const handleCodeChange = (text, index) => {
+    const newCode = [...code];
+    newCode[index] = text;
+    setCode(newCode);
+    
+    if (text && index < 3) {
+      inputs[index + 1].focus();
+    }
   };
+
+  const inputs = [];
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <Text style={styles.header}>Verify Your Identity</Text>
-      <Text style={styles.subtext}>
-        We’ve sent a 4-digit code to 071***05.{"\n"}Please enter it below.
-      </Text>
+      <CustomStatusBar 
+          backgroundColor="#FFFFFF"  
+          barStyle="dark-content"    
+        />
+      
+      <View style={styles.content}>
+        <Text style={styles.title}>Verify Your Identity</Text>
+        <Text style={styles.subtitle}>
+          We've sent a 4-digit code to {phoneNumber}.{'\n'} Please enter it below.
+        </Text>
 
-      <View style={styles.otpContainer}>
-        {otp.map((digit, index) => (
-          <TextInput
-            key={index}
-            style={styles.otpBox}
-            value={digit}
-            maxLength={1}
-            keyboardType="number-pad"
-            onChangeText={(value) => handleChange(value, index)}
-          />
-        ))}
+        <View style={styles.otpContainer}>
+          {[0, 1, 2, 3].map((index) => (
+            <TextInput
+              key={index}
+              ref={(input) => inputs[index] = input}
+              style={styles.otpInput}
+              maxLength={1}
+              keyboardType="numeric"
+              value={code[index]}
+              onChangeText={(text) => handleCodeChange(text, index)}
+            />
+          ))}
+        </View>
+
+        <TouchableOpacity onPress={onResend}>
+          <Text style={styles.resendText}>
+            Didn't receive a code? <Text style={styles.resendLink}>Resend</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
-
-      <Text style={styles.resendText}>
-        Didn’t receive a code? <Text style={styles.resendLink}>Resend</Text>
-      </Text>
-
-      <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Home')}>
-        <Text style={styles.buttonText}>Continue</Text>
-      </TouchableOpacity>
-       
+      <Button
+      title={'Continue'}
+      style={styles.continueButton}
+      textStyle={styles.continueButtonText}
+      onPress={()=> navigation.navigate('Home')}
+      />
     </View>
   );
 };
@@ -46,93 +63,69 @@ const VerificationOTP = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    height: '100%',
-    backgroundColor: "#fff",
-    // backgroundColor:'black',
-    alignItems: "center",
-    paddingTop:15,
-    paddingRight:15,
-    paddingLeft:15
+    backgroundColor: '#FFFFFF',
   },
-  header: {
-    color: "#0B0C15", 
-    fontFamily:'Inter',
-    fontSize: 24, 
-    fontWeight: "700", 
-    lineHeight:29, 
-    letterSpacing: 0, 
-    marginBottom: 20 ,
+  content: {
+    alignItems: 'center',
+    marginTop: 60,
   },
-  subtext: {
-    color: "#939393", 
-    fontFamily:'Inter',
-    fontSize: 14, 
-    fontWeight: "500", 
-    lineHeight:16, 
-    letterSpacing: 0, 
-    marginBottom: 20 ,
-    textAlign: 'center'
+  title: {
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#0B0C15',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#939393',
+    textAlign: 'center',
+    marginTop: 16,
+    lineHeight: 17,
   },
   otpContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "60%",
-    marginBottom: 20,
-   
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 15,
+    marginTop: 24,
   },
-  otpBox: {
-    width: 45,
-    height: 50,
-    borderColor: "#ccc",
-     backgroundColor:'#F5F5F5',
-    borderRadius: 6,
-    textAlign: "center",
-    fontSize: 18,
-    color: "#000000",
-    fontFamily:'Inter', 
-    fontWeight: "500", 
-    lineHeight:21, 
-    letterSpacing: 0, 
+  otpInput: {
+    width: 50,
+    height: 55,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: '600',
   },
   resendText: {
-    textAlign: "center",
+    fontFamily: 'Inter',
     fontSize: 14,
-    color: "#9D9EA6",
-    fontFamily:'Inter', 
-    fontWeight: "500", 
-    lineHeight:16, 
-    letterSpacing: 0, 
-    marginBottom: 20,
+    fontWeight: '500',
+    color: '#9D9EA6',
+    marginTop: 24,
+    textAlign: 'center',
   },
   resendLink: {
-    color: "#235AFF",
-    fontWeight: "500",
-    fontFamily:'Inter', 
-    fontWeight: "500", 
-    lineHeight:14, 
-    letterSpacing: 0,
-    textAlign: "center",
+    color: '#235AFF',
   },
-  button: {
+  continueButton: {
+    backgroundColor: '#235AFF',
     borderRadius: 10,
-    width: "100%",
-    height:'7%',
-    backgroundColor: "#235AFF",
+    padding: 14,
+    width: '90%',
     alignItems: 'center',
-    bottom:10,
-    position:'absolute',
-    // marginBottom:10,
-    justifyContent: 'center'
- 
+    position: 'absolute',
+    bottom: -2,
   },
-  buttonText: {
-    color: "#ffffff", 
-    fontFamily:'Inter',
-    fontSize: 16, 
-    fontWeight: "700", 
-    lineHeight:19, 
-    letterSpacing: 0, 
+  continueButtonText: {
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });
 
-export default VerificationOTP;
+export default VerifyScreen;

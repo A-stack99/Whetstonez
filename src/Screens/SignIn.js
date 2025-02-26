@@ -10,7 +10,9 @@ import {
   Image
 } from "react-native";
 import Button from "../Components/SignIn/Button";
-import VerificationOTP from "./VerifyScreen";
+import Apple from "../assests/Svg/Apple";
+import Google from "../assests/Svg/Google";
+import CustomStatusBar from "../Components/StatusBar";
 
 const SignIn = ({ navigation }) => {
    
@@ -19,7 +21,10 @@ const SignIn = ({ navigation }) => {
       source={require("../assests/Images/SalonBg.png")}
       style={styles.container}
     >
-       <StatusBar barStyle="light-content" backgroundColor="transparent" />
+          <CustomStatusBar 
+          backgroundColor="transparent"  
+          barStyle="light-content"    
+        />
 
       <View style={styles.overlay}>
         <Text style={styles.heading}>Book Your Perfect {"\n"}Look in Minutes!</Text>
@@ -30,7 +35,7 @@ const SignIn = ({ navigation }) => {
           style={styles.input}
         />
        <Button 
-              onPress={() => navigation.navigate('VerificationOTP')} 
+              onPress={() => navigation.navigate('VerifyScreen')} 
               title="Continue" 
               style={styles.button} 
               textStyle={styles.buttonText} 
@@ -38,16 +43,14 @@ const SignIn = ({ navigation }) => {
       
             <Text style={styles.orText}>Or</Text> 
             <TouchableOpacity
-        onPress={() => navigation.navigate('VerificationOTP')}
         style={styles.appleButton}>
-          <Image source={require('../assests/Images/apple.png')} style={styles.apple}/>
+          <Apple style={styles.apple}/>
         <Text style={styles.appleButtonText}>Continue with Apple</Text>
       </TouchableOpacity>
                      
       <TouchableOpacity
-        onPress={() => navigation.navigate('VerificationOTP')}
         style={styles.googleButton}>
-          <Image source={require('../assests/Images/google.png')} style={styles.google}/>
+           <Google style={styles.google}/>
         <Text style={styles.googleButtonText}>Continue with Apple</Text>
       </TouchableOpacity>
         
@@ -164,15 +167,14 @@ const styles = StyleSheet.create({
     alignItems:'center'
   },
   apple:{
-    width:25,
-    height:25,
+    width:20,
+    height:20,
     marginRight:10,
-    marginBottom:5,
     resizeMode:'contain'
   },
   google:{
-    width:25,
-    height:25,
+    width:20,
+    height:20,
     marginRight:10,
     resizeMode:'contain'
   }

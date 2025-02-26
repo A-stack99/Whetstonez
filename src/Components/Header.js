@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // You can use any icon library (e.g., React Native Vector Icons)
+// import { Ionicons } from '@expo/vector-icons';
 import { Header } from '@react-navigation/elements';
 
 const CustomHeader = ({ title, onBackPress, onRightPress, rightIcon, rightText }) => {

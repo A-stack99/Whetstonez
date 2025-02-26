@@ -24,10 +24,10 @@ export default CustomStatusBar;
 //     return (
 //       <View style={styles.container}>
 //         {/* Custom StatusBar */}
-//         <CustomStatusBar 
-//           backgroundColor="#007BFF"  // Background color for the status bar
-//           barStyle="light-content"    // Dark content for light background, light-content for dark background
-//         />
+        // <CustomStatusBar 
+        //   backgroundColor="#007BFF"  // Background color for the status bar
+        //   barStyle="light-content"    // Dark content for light background, light-content for dark background
+        // />
         
 //         <Text style={styles.text}>Welcome to the Home Screen!</Text>
 //       </View>
