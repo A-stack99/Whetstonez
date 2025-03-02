@@ -36,6 +36,7 @@ const Booking = ( { navigation }) => {
        style={styles.continueButton}
        textStyle={styles.continueButtonText}
        onPress={()=> navigation.navigate('Payment')}/>
+       
         <View style={{ height: 4, backgroundColor: '#000',  borderRadius: 1 , width:'30%' , alignSelf:'center', bottom:-10 }} />
     </View>
   );

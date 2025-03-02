@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity , TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Locator1 from '../../assests/Svg/Locator1';
 import Notification from '../../assests/Svg/Notification';
+
 
 const Header = ({ style }) => {
   return (
@@ -31,6 +32,7 @@ const Header = ({ style }) => {
           {/* <View style={styles.notificationDot} /> */}
         </View>
       </TouchableOpacity>
+      
     </View>
   );
 };
@@ -105,6 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#E74C3C',
   },
+
 });
 
 

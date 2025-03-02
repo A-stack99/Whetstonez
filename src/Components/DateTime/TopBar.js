@@ -29,7 +29,7 @@ const TopBar = ({ title = "Date and time" }) => {
           }}/>
         <Text style={{
           fontSize: 16,
-          fontWeight: '650',
+          fontWeight: '700',
           lineHeight: 24,
           color: '#0b0c15',
           fontFamily: 'Inter',

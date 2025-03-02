@@ -1,111 +1,59 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList, ScrollView } from 'react-native';
-import Locator from '../../assests/Svg/Locator'; 
-import Star from '../../assests/Svg/Start'; 
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import Locator from '../../assests/Svg/Locator';
+import Star from '../../assests/Svg/Start';
 import { useNavigation } from '@react-navigation/native';
 
-const ServiceItem = ({ 
-  salonName = "Hair Avenue", 
-  location = "Lakewood, California", 
-  distance = "2 km", 
-  rating = "4.7", 
-  reviews = "312", 
-  imageUrl = require('../../assests/Images/Salon1.png'), 
-  style ,
- 
+const ServiceItem = ({
+  salonName = 'Hair Avenue',
+  location = 'Lakewood, California',
+  distance = '2 km',
+  rating = '4.7',
+  reviews = '312',
+  imageUrl = require('../../assests/Images/Salon1.png'),
 }) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity 
-    style={styles.card}
-    onPress={() => navigation.navigate('SalonDetail')}
-    >
-        <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('SalonDetail')}
-    ></TouchableOpacity>
-      <View style={styles.container}>
-        <Image 
-          source={imageUrl} 
-          style={styles.salonImage}
-          resizeMode="contain"
-        />
-        
-        <View style={styles.infoContainer}>
-          <View style={styles.headerRow}>
-            <Text style={styles.salonName}>{salonName}</Text>
-            <Text style={styles.distance}>{distance}</Text>
-          </View>
-          
-          <View style={styles.locationRow}>
-            <Locator style={styles.locationIcon} />
-            <Text style={styles.locationText}>{location}</Text>
-          </View>
-          
-          <View style={styles.ratingRow}>
-            <Star style={styles.starIcon} />
-            <Text style={styles.ratingText}>
-      <Text style={styles.rating}>{rating}</Text> 
-      ({<Text style={[styles.reviews , left=-10]}>{reviews}</Text>})
-    </Text>
+    <View>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('SalonDetail')}>
+        <View style={styles.container}>
+          <Image source={imageUrl} style={styles.salonImage} resizeMode="contain" />
+          <View style={styles.infoContainer}>
+            <View style={styles.headerRow}>
+              <Text style={styles.salonName}>{salonName}</Text>
+              <Text style={styles.distance}>{distance}</Text>
+            </View>
+
+            <View style={styles.locationRow}>
+              <Locator style={styles.locationIcon} />
+              <Text style={styles.locationText}>{location}</Text>
+            </View>
+
+            <View style={styles.ratingRow}>
+              <Star style={styles.starIcon} />
+              <Text style={styles.ratingText}>
+                <Text style={styles.rating}>{rating}</Text> ({reviews})
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
-};
-
-const ServiceList = ({ navigation }) => {
-  const services = [
-    {
-      salonName: "Hair Avenue",
-      location: "Lakewood, California",
-      distance: "2 km",
-      rating: "4.7",
-      reviews: "312",
-      imageUrl: require('../../assests/Images/Salon1.png'),
-    },
-    {
-      salonName: "Beauty Bliss",
-      location: "Los Angeles, California",
-      distance: "5 km",
-      rating: "4.5",
-      reviews: "210",
-      imageUrl: require('../../assests/Images/Salon2.png')
-    },
-  ];
-
-  return (
-    <FlatList 
-    showsVerticalScrollIndicator={false}
-      data={services} 
-      keyExtractor={(item, index) => index.toString()} 
-      renderItem={({ item }) => (
-        <ServiceItem 
-          salonName={item.salonName} 
-          location={item.location} 
-          distance={item.distance} 
-          rating={item.rating} 
-          reviews={item.reviews} 
-          imageUrl={item.imageUrl} 
-          navigation={navigation} 
-        />
-      )}
-    />
+      </TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
+    // backgroundColor:'#000',
     borderRadius: 10,
-    minWidth: 355,
-    width:'90%',
-    marginBottom:8,
+    width: '92%',
+    marginBottom: 15,
     alignSelf: 'center',
-    alignItems:'center',
+    alignItems: 'center',
     justifyContent: 'center',
-    // padding: 10
+    padding: 10,
+    // left:-20
   },
   container: {
     flexDirection: 'row',
@@ -115,8 +63,6 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 8,
-    marginBottom: 15,
-    marginLeft:10
   },
   infoContainer: {
     flex: 1,
@@ -130,7 +76,7 @@ const styles = StyleSheet.create({
   },
   salonName: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '700',
     color: '#0b0c15',
     fontFamily: 'Inter',
   },
@@ -164,10 +110,10 @@ const styles = StyleSheet.create({
   },
   rating: {
     fontWeight: 'bold',
-    color: '#0b0c15', 
+    color: '#0b0c15',
   },
   reviews: {
-    color: '#888', 
+    color: '#888',
     marginLeft: -4,
   },
   starIcon: {
@@ -183,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceList;
+export default ServiceItem;

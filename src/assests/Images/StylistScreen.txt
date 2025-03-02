@@ -1,0 +1,282 @@
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import TopBar from '../../components/StylistScreen/TopBar';
+import Card from '../../components/StylistScreen/Card';
+import Button from '../../components/StylistScreen/Button';
+
+const StylistSelect = () => {
+  return (
+    <View style={styles.container}>
+      <TopBar />
+      <View style={styles.contentContainer}>
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image-17.png"
+          name="Any Stylist"
+          description="Next available stylist"
+          isSelected={true}
+        />
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image.png"
+          name="Multiple Stylists"
+          description="Choose per service"
+        />
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image-2.png"
+          name="John Doe"
+          description="Hair Specialist"
+          isTopRated={true}
+        />
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image-3.png"
+          name="Anna Lee"
+          description="Hair Dresser"
+          isTopRated={true}
+        />
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image-4.png"
+          name="Ella Ford"
+          description="Hair Specialist"
+        />
+        <Card
+          imageUrl="https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/image-5.png"
+          name="Marsh Donnell"
+          description="Hair Specialist"
+        />
+      </View>
+      <Button title="Select & Continue" />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    minHeight: '100vh',
+    backgroundColor: '#f8f8f8',
+  },
+  contentContainer: {
+    flexGrow: 1,
+    flexDirection: 'column',
+    padding: 16,
+    paddingTop: 8,
+  },
+});
+
+export default StylistSelect;
+
+/////////////////////
+
+import React from 'react';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+
+const Button = ({ 
+  title = "Select & Continue",
+  onPress = () => {},
+  style
+}) => {
+  return (
+    <TouchableOpacity 
+      style={[styles.button, style]} 
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#235AFF',
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    minWidth: 323,
+    height: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'Inter',
+    fontWeight: '600',
+    textAlign: 'center',
+  }
+});
+
+export default Button;
+
+/////////////////////
+
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+
+const Card = ({
+  imageUrl,
+  name = "Stylist Name",
+  description = "Stylist Description",
+  isSelected = false,
+  isTopRated = false,
+  onSelect = () => {}
+}) => {
+  return (
+    <TouchableOpacity 
+      style={[
+        styles.container,
+        isSelected && styles.selectedContainer
+      ]}
+      onPress={onSelect}
+    >
+      <View style={styles.contentWrapper}>
+        <Image 
+          source={{ uri: imageUrl }}
+          style={styles.stylistImage}
+        />
+        <View style={styles.textContainer}>
+          <Text style={styles.nameText}>{name}</Text>
+          <Text style={styles.descriptionText}>{description}</Text>
+        </View>
+        {isTopRated && (
+          <View style={styles.topRatedBadge}>
+            <Image 
+              source={{ uri: 'https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/vuesax-b.png' }}
+              style={styles.medalIcon}
+            />
+            <Text style={styles.topRatedText}>Top Rated</Text>
+          </View>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    minWidth: 320,
+    height: 80,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+  },
+  selectedContainer: {
+    borderColor: '#235aff',
+  },
+  contentWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  stylistImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 10,
+  },
+  textContainer: {
+    flex: 1,
+    gap: 4,
+  },
+  nameText: {
+    fontSize: 16,
+    color: '#0b0c15',
+    fontFamily: 'Inter',
+  },
+  descriptionText: {
+    fontSize: 14,
+    color: '#939393',
+    fontFamily: 'Inter',
+  },
+  topRatedBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f7d794',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 6,
+    gap: 4,
+  },
+  medalIcon: {
+    width: 20,
+    height: 20,
+  },
+  topRatedText: {
+    fontSize: 12,
+    color: '#333333',
+    fontFamily: 'Inter',
+    lineHeight: 18,
+  },
+});
+
+export default Card;
+
+///////////////////////
+
+import React from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+
+const TopBar = ({ title = "Choose your stylist", onBack = () => {} }) => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.contentWrapper}>
+        <TouchableOpacity 
+          onPress={onBack}
+          style={styles.iconButton}
+        >
+          <Image 
+            source={{ uri: 'https://dashboard.codeparrot.ai/api/image/Z7ix2FCHtJJZ6v_D/icon.png' }}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
+        <Text style={styles.title}>{title}</Text>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    minWidth: 343,
+    height: 44,
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  contentWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  iconButton: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  title: {
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: '600',
+    lineHeight: 24,
+    color: '#0b0c15',
+  },
+});
+
+export default TopBar;
+
+

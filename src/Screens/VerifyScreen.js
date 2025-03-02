@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import CustomStatusBar from '../Components/StatusBar';
 import Button from '../Components/CustomButton';
-const VerifyScreen = ({ phoneNumber = "071***05", onResend = () => {} , navigation }) => {
+const VerifyScreen = ({ phoneNumber = "071***05", navigation }) => {
   const [code, setCode] = useState(['', '', '', '']);
 
   const handleCodeChange = (text, index) => {
@@ -44,7 +44,7 @@ const VerifyScreen = ({ phoneNumber = "071***05", onResend = () => {} , navigati
           ))}
         </View>
 
-        <TouchableOpacity onPress={onResend}>
+        <TouchableOpacity >
           <Text style={styles.resendText}>
             Didn't receive a code? <Text style={styles.resendLink}>Resend</Text>
           </Text>

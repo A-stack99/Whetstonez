@@ -89,20 +89,17 @@ const Bottom = ({ style }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%', 
-    // height: '100%',
-    backgroundColor: '#fff',
-    // borderRadius: 10,
     justifyContent: 'center',
-    flex:1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
+    // flex:1,
+    // flexDirection: 'column',
+    // justifyContent: 'flex-end',
+    // position:'static'
   },
   content: {
     width: '100%',
-    height: '620%',
+    // height:70,
     borderRadius: 10,
     backgroundColor: '#ffffff',
-    // backgroundColor:'black',
     justifyContent: 'center',
   },
   navItems: {

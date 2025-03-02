@@ -3,43 +3,44 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import Medal from '../../assests/Svg/Medal';
 import Person from '../../assests/Svg/Person';
 import People from '../../assests/Svg/People';
+import BlueTick from '../../assests/Svg/BlueTick';
 
 const Card = ({
   imageUrl,
   name = "Stylist Name",
   description = "Stylist Description",
-  isSelected = false,
   isTopRated = false,
   onSelect = () => {},
   useSvg = false,
   svgComponent = null, 
+  isSelected = false, 
 }) => {
   const imageSource = typeof imageUrl === 'string' ? { uri: imageUrl } : imageUrl;
 
   return (
     <TouchableOpacity 
-      style={[
-        styles.container,
-        isSelected && styles.selectedContainer
-      ]}
+      style={[styles.container, isSelected && styles.selectedContainer]} 
       onPress={onSelect}
     >
       <View style={styles.contentWrapper}>
-         {useSvg ? (
-                  svgComponent || <Person style={styles.personIcon} />
-                ) : (
-                  <Image source={imageSource} style={styles.stylistImage} />
-                )}
-                
-        {/* <People/> */}
-        {/* <Person style={styles.personIcon}/> */}
+        {useSvg ? (
+             <View style={[styles.svgWrapper, { backgroundColor: '#235AFF0A', borderRadius:10 }]}>
+             {svgComponent || <Person style={styles.personIcon} />}
+           </View>
+        ) : (
+          <Image source={imageSource} style={styles.stylistImage} />
+        )}
+        
         <View style={styles.textContainer}>
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.descriptionText}>{description}</Text>
         </View>
+
+        {isSelected && <BlueTick style={styles.blueTick} />}
+
         {isTopRated && (
           <View style={styles.topRatedBadge}>
-            <Medal style={styles.medalIcon}/>
+            <Medal style={styles.medalIcon} />
             <Text style={styles.topRatedText}>Top Rated</Text>
           </View>
         )}
@@ -61,10 +62,9 @@ const styles = StyleSheet.create({
     borderColor: '#f0f0f0',
   },
   selectedContainer: {
-    borderColor: '#235aff',
+    borderColor: '#235AFF',  // Highlight the selected card
   },
   contentWrapper: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
@@ -106,6 +106,13 @@ const styles = StyleSheet.create({
     color: '#333333',
     fontFamily: 'Inter',
     lineHeight: 18,
+  },
+  blueTick: {
+    position: 'absolute',
+    top: -10,
+    right: -5,
+    width: 22,
+    height: 22,
   },
 });
 

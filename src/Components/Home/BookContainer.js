@@ -1,81 +1,117 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import Search from '../../assests/Svg/Search';
+import ServiceItem from './ServiceItem';
 import Indicator from '../../assests/Svg/Indicator';
 
 const BookContainer = ({ 
-  style,
-  onSearch = () => {},
-  onBookNow = () => {},
-  onServiceSelect = () => 'SalonDetail',
-  onViewMap = () => {},
+  onBookNow = () => {}, 
+  onServiceSelect = () => 'SalonDetail', 
+  onViewMap = () => {} 
 }) => {
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
+
   const services = [
-      { id: 1, name: 'Hair Cut', icon: require('../../assests/Images/haircut.png'), active: true },  
-      { id: 2, name: 'Hair Styling', icon: require('../../assests/Images/style.png'), active: false }, 
-      { id: 3, name: 'Nail Art', icon: require('../../assests/Images/polish.png'), active: false },
-      { id: 4, name: 'Hair Cut', icon: require('../../assests/Images/drayer.png'), active: false }
-    ];
+    { 
+      id: 1, 
+      name: 'Hair Cut', 
+      icon: require('../../assests/Images/haircut.png'), 
+      salon: { 
+        salonName: 'Hair Avenue',
+        location: 'Lakewood, California',
+        distance: '2 km',
+        rating: '4.7',
+        reviews: '312',
+        imageUrl: require('../../assests/Images/Salon1.png'),
+      }
+    },  
+    { 
+      id: 2, 
+      name: 'Hair Styling', 
+      icon: require('../../assests/Images/style.png'),
+      salon: { 
+        salonName: 'Beauty Bliss',
+        location: 'Los Angeles, California',
+        distance: '5 km',
+        rating: '4.5',
+        reviews: '210',
+        imageUrl: require('../../assests/Images/Salon2.png'),
+      }
+    },
+    { 
+      id: 3, 
+      name: 'Nail Art', 
+      icon: require('../../assests/Images/polish.png'),
+      salon: { 
+        salonName: 'Nail Studio',
+        location: 'Hollywood, California',
+        distance: '3 km',
+        rating: '4.2',
+        reviews: '156',
+        imageUrl: require('../../assests/Images/Salon3.png'),
+      }
+    },
+    { 
+      id: 4, 
+      name: 'Hair Cut', 
+      icon: require('../../assests/Images/drayer.png'),
+      salon: { 
+        salonName: 'Shine Salon',
+        location: 'Santa Monica, California',
+        distance: '8 km',
+        rating: '4.6',
+        reviews: '98',
+        imageUrl: require('../../assests/Images/Salon3.png'),
+      }
+    }
+  ];
+ 
+  const handleServiceSelect = (service) => {
+    setSelectedServiceId(service.id); 
+    onServiceSelect(service.id);
+  };
+
+  const selectedService = services.find(service => service.id === selectedServiceId); 
 
   return (
     <>
-     <View style={[styles.container, style]}>
-      <View style={styles.searchContainer}>
-        <Search style={styles.searchIcon} />
-        <TextInput
-          placeholder="Enter address or city name"
-          placeholderTextColor="#a0a0a0"
-          style={styles.searchInput}
-        />
-      </View>
-
-      <View style={styles.promotionBanner}>
-        <View style={styles.ellipseBackground} />
-        <Image source={require('../../assests/Images/homeBG.png')}   style={styles.bannerImage}
-          resizeMode="cover"/>
-        <View style={styles.bannerOverlay} />
-        <View style={styles.bannerContent}>
-          <Text style={styles.specialText}>Morning Special!</Text>
-          <Text style={styles.discountText}>Get 20% Off</Text>
-          <Text style={styles.descriptionText}>on All Haircuts Between 9-10 AM.</Text>
-          <TouchableOpacity style={styles.bookButton} onPress={onBookNow}>
-            <Text style={styles.bookButtonText}>Book Now</Text>
-          </TouchableOpacity>
+      <View style={[styles.container]}>
+        <View style={styles.promotionBanner}>
+          <View style={styles.ellipseBackground} />
+          <Image source={require('../../assests/Images/homeBG.png')} style={styles.bannerImage} resizeMode="cover" />
+          <View style={styles.bannerOverlay} />
+          <View style={styles.bannerContent}>
+            <Text style={styles.specialText}>Morning Special!</Text>
+            <Text style={styles.discountText}>Get 20% Off</Text>
+            <Text style={styles.descriptionText}>on All Haircuts Between 9-10 AM.</Text>
+            <TouchableOpacity style={styles.bookButton} onPress={onBookNow}>
+              <Text style={styles.bookButtonText}>Book Now</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-      </View>
 
- 
       <View style={styles.servicesSection}>
         <Text style={styles.sectionTitle}>Services</Text>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          style={styles.servicesScrollView}
-        >
-          <View style={styles.servicesList}>
-            {services.map((service) => (
-              <TouchableOpacity
-                key={service.id}
-                style={[
-                  styles.serviceItem,
-                  service.active && styles.activeServiceItem,
-                ]}
-                onPress={() => onServiceSelect(service.id)}
-              >
-                <Image source={service.icon} style={styles.serviceIcon} />
-                <Text style={[
-                  styles.serviceText,
-                  service.active && styles.activeServiceText,
-                ]}>
-                  {service.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </ScrollView>
+     
+        <View style={styles.servicesList}>
+        {services.map((service) => (
+          <TouchableOpacity
+            key={service.id}
+            style={[ 
+              styles.serviceItem,
+              service.id === selectedServiceId && styles.activeServiceItem, 
+            ]}
+            onPress={() => handleServiceSelect(service)}
+          >
+            <Image source={service.icon} style={styles.serviceIcon} />
+            <Text style={[styles.serviceText, service.id === selectedServiceId && styles.activeServiceText]}>
+              {service.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+        </View>
+   
       </View>
-
       <View style={styles.nearbySalonsSection}>
         <Text style={styles.sectionTitle}>Nearby Salons</Text>
         <TouchableOpacity style={styles.viewMapButton} onPress={onViewMap}>
@@ -83,60 +119,45 @@ const BookContainer = ({
           <Text style={styles.viewMapText}>View on Map</Text>
         </TouchableOpacity>
       </View>
-       </>
+
+      {selectedService && (
+        <ServiceItem 
+          salonName={selectedService.salon.salonName} 
+          location={selectedService.salon.location}
+          distance={selectedService.salon.distance}
+          rating={selectedService.salon.rating} 
+          reviews={selectedService.salon.reviews}
+          imageUrl={selectedService.salon.imageUrl} 
+        />
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
+    flex: 1,
     borderRadius: 2,
     width: '100%',
-    height: '32%',
+    maxWidth: '100%',  
     backgroundColor: '#ffffff',
+    // backgroundColor:'#000000',
     marginBottom: 28,
-    paddingHorizontal: 20,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    height: 50,
-    marginBottom: 24,
-    marginTop: 15,
-  },
-  iconWrapper: {
-    width: 30, 
-    height: 30, 
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  searchIcon: {
-    width: 20,
-    height: 20,
-  },
-  searchInput: {
-    marginLeft: 8,
-    flex: 1,
-    fontFamily: 'Inter',
-    fontSize: 14,
-    color: '#000000',
+    // paddingHorizontal: 20,
   },
   promotionBanner: {
-    height: 150,
+    width: '92%',
+    height: 'auto',
     borderRadius: 10,
     overflow: 'hidden',
-    // marginBottom: 30,
+    left:15,
+    justifyContent: 'center',
   },
   ellipseBackground: {
     position: 'absolute',
     width: 354,
     height: 354,
     backgroundColor: 'rgba(35, 90, 255, 0.25)',
-
     borderRadius: 177,
     left: -130,
     top: -177,
@@ -192,8 +213,8 @@ const styles = StyleSheet.create({
   },
   servicesSection: {
     marginBottom: 60,
-    paddingHorizontal: 18,
-
+    paddingHorizontal: 10,
+    // paddingHorizontal: 8,
   },
   sectionTitle: {
     fontFamily: 'Inter',
@@ -202,9 +223,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#0B0C15',
     marginBottom: 18,
-  },
-  servicesScrollView: {
-    flexGrow: 0,
+    paddingHorizontal:5,
   },
   servicesList: {
     flexDirection: 'row',
@@ -215,8 +234,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
     borderRadius: 8,
-    padding: 10,
-    paddingHorizontal: 10,
+    padding: 5,
+    // paddingHorizontal: 10,
     height: 40,
     shadowColor: '#000',
     shadowOffset: {
@@ -248,7 +267,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent:'space-between',
-    gap:138,
+    paddingHorizontal:12,
     top:-25,
   },
   viewMapButton: {
