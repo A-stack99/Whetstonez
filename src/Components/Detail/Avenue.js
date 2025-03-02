@@ -37,7 +37,7 @@ export default Avenue;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 22,
+    marginTop: 20,
   },
   title: {
     fontSize: 25,

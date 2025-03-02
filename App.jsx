@@ -1,6 +1,5 @@
 import React from 'react';
-// import Store from './src/Redux/Store';
-// import Counter from './src/Screens/Counter';
+
 import Splash from './src/Screens/Splash';
 import SignIn from './src/Screens/SignIn';
 import VerifyScreen from './src/Screens/VerifyScreen';
@@ -72,5 +71,21 @@ const App = () => {
 };
 
 export default App;
+
+
+// import React from 'react';
+// import { Provider } from 'react-redux';
+// import store from './src/Redux/Store';
+// import Home from './src/Screens/AddToCart';
+
+// const App = () => {
+//   return (
+//     <Provider store={store}>
+//       <Home />
+//     </Provider>
+//   );
+// };
+
+// export default App;
 
 

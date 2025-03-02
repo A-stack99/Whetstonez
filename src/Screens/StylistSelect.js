@@ -174,12 +174,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  blueTick: {
-    top: -160,   
-    width: 20,  
-    height: 20, 
-    zIndex:1
-  },
 });
 
 export default StylistSelect;

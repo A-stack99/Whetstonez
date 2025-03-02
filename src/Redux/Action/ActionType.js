@@ -1,0 +1,6 @@
+
+export const ADD_TO_CART = 'ADD_TO_CART';
+export const SET_SERVICES = 'SET_SERVICES';
+export const SELECT_SERVICE = 'SELECT_SERVICE';
+export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB';
+export const TOGGLE_SERVICE = 'TOGGLE_SERVICE';

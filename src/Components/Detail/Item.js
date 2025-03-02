@@ -93,20 +93,21 @@ const List = ({ style }) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    gap: 6,
+    gap: 2,
     backgroundColor: '#ffffff',
   },
   serviceCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 12,
+    paddingHorizontal: 10,
+    paddingVertical:5,
     backgroundColor: '#ffffff',
     borderRadius: 10,
     width: '100%',
   },
   serviceContent: {
-    gap: 4,
+    gap: 2,
     flex: 1,
   },
   serviceName: {

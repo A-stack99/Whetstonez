@@ -1,76 +1,90 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { SET_SERVICES, SELECT_SERVICE } from '../../Redux/Action/ActionType';
 import ServiceItem from './ServiceItem';
 import Indicator from '../../assests/Svg/Indicator';
 
-const BookContainer = ({ 
-  onBookNow = () => {}, 
-  onServiceSelect = () => 'SalonDetail', 
-  onViewMap = () => {} 
-}) => {
-  const [selectedServiceId, setSelectedServiceId] = useState(null);
+const setServices = (services) => ({
+  type: SET_SERVICES,
+  data: services
+});
 
-  const services = [
-    { 
-      id: 1, 
-      name: 'Hair Cut', 
-      icon: require('../../assests/Images/haircut.png'), 
-      salon: { 
-        salonName: 'Hair Avenue',
-        location: 'Lakewood, California',
-        distance: '2 km',
-        rating: '4.7',
-        reviews: '312',
-        imageUrl: require('../../assests/Images/Salon1.png'),
+const selectService = (serviceId) => ({
+  type: SELECT_SERVICE,
+  data: serviceId
+});
+
+const BookContainer = ({ onBookNow = () => {}, onServiceSelect = () => {}, onViewMap = () => {} }) => {
+  const dispatch = useDispatch();
+
+  const { services = [], selectedServiceId } = useSelector((state) => state.services);  
+
+  useEffect(() => {
+    const servicesData = [
+      { 
+        id: 1, 
+        name: 'Hair Cut', 
+        icon: require('../../assests/Images/haircut.png'), 
+        salon: { 
+          salonName: 'Hair Avenue',
+          location: 'Lakewood, California',
+          distance: '2 km',
+          rating: '4.7',
+          reviews: '312',
+          imageUrl: require('../../assests/Images/Salon1.png'),
+        }
+      },  
+      { 
+        id: 2, 
+        name: 'Hair Styling', 
+        icon: require('../../assests/Images/style.png'),
+        salon: { 
+          salonName: 'Beauty Bliss',
+          location: 'Los Angeles, California',
+          distance: '5 km',
+          rating: '4.5',
+          reviews: '210',
+          imageUrl: require('../../assests/Images/Salon2.png'),
+        }
+      },
+      { 
+        id: 3, 
+        name: 'Nail Art', 
+        icon: require('../../assests/Images/polish.png'),
+        salon: { 
+          salonName: 'Nail Studio',
+          location: 'Hollywood, California',
+          distance: '3 km',
+          rating: '4.2',
+          reviews: '156',
+          imageUrl: require('../../assests/Images/Salon3.png'),
+        }
+      },
+      { 
+        id: 4, 
+        name: 'Hair Cut', 
+        icon: require('../../assests/Images/drayer.png'),
+        salon: { 
+          salonName: 'Shine Salon',
+          location: 'Santa Monica, California',
+          distance: '8 km',
+          rating: '4.6',
+          reviews: '98',
+          imageUrl: require('../../assests/Images/Salon3.png'),
+        }
       }
-    },  
-    { 
-      id: 2, 
-      name: 'Hair Styling', 
-      icon: require('../../assests/Images/style.png'),
-      salon: { 
-        salonName: 'Beauty Bliss',
-        location: 'Los Angeles, California',
-        distance: '5 km',
-        rating: '4.5',
-        reviews: '210',
-        imageUrl: require('../../assests/Images/Salon2.png'),
-      }
-    },
-    { 
-      id: 3, 
-      name: 'Nail Art', 
-      icon: require('../../assests/Images/polish.png'),
-      salon: { 
-        salonName: 'Nail Studio',
-        location: 'Hollywood, California',
-        distance: '3 km',
-        rating: '4.2',
-        reviews: '156',
-        imageUrl: require('../../assests/Images/Salon3.png'),
-      }
-    },
-    { 
-      id: 4, 
-      name: 'Hair Cut', 
-      icon: require('../../assests/Images/drayer.png'),
-      salon: { 
-        salonName: 'Shine Salon',
-        location: 'Santa Monica, California',
-        distance: '8 km',
-        rating: '4.6',
-        reviews: '98',
-        imageUrl: require('../../assests/Images/Salon3.png'),
-      }
-    }
-  ];
- 
+    ];
+
+    dispatch(setServices(servicesData)); 
+  }, [dispatch]);
+
   const handleServiceSelect = (service) => {
-    setSelectedServiceId(service.id); 
-    onServiceSelect(service.id);
+    dispatch(selectService(service.id)); 
+    onServiceSelect(service.id); 
   };
 
-  const selectedService = services.find(service => service.id === selectedServiceId); 
+  const selectedService = services.find(service => service.id === selectedServiceId);
 
   return (
     <>
@@ -92,30 +106,29 @@ const BookContainer = ({
 
       <View style={styles.servicesSection}>
         <Text style={styles.sectionTitle}>Services</Text>
-     
         <View style={styles.servicesList}>
-        {services.map((service) => (
-          <TouchableOpacity
-            key={service.id}
-            style={[ 
-              styles.serviceItem,
-              service.id === selectedServiceId && styles.activeServiceItem, 
-            ]}
-            onPress={() => handleServiceSelect(service)}
-          >
-            <Image source={service.icon} style={styles.serviceIcon} />
-            <Text style={[styles.serviceText, service.id === selectedServiceId && styles.activeServiceText]}>
-              {service.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
+          {services.map((service) => (
+            <TouchableOpacity
+              key={service.id}
+              style={[ 
+                styles.serviceItem,
+                service.id === selectedServiceId && styles.activeServiceItem, 
+              ]}
+              onPress={() => handleServiceSelect(service)}
+            >
+              <Image source={service.icon} style={styles.serviceIcon} />
+              <Text style={[styles.serviceText, service.id === selectedServiceId && styles.activeServiceText]}>
+                {service.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
-   
       </View>
+
       <View style={styles.nearbySalonsSection}>
         <Text style={styles.sectionTitle}>Nearby Salons</Text>
         <TouchableOpacity style={styles.viewMapButton} onPress={onViewMap}>
-          <Indicator style={styles.mapIcon}  resizeMode="contain"/>
+          <Indicator style={styles.mapIcon} resizeMode="contain" />
           <Text style={styles.viewMapText}>View on Map</Text>
         </TouchableOpacity>
       </View>
@@ -141,9 +154,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: '100%',  
     backgroundColor: '#ffffff',
-    // backgroundColor:'#000000',
     marginBottom: 28,
-    // paddingHorizontal: 20,
   },
   promotionBanner: {
     width: '92%',
@@ -214,7 +225,6 @@ const styles = StyleSheet.create({
   servicesSection: {
     marginBottom: 60,
     paddingHorizontal: 10,
-    // paddingHorizontal: 8,
   },
   sectionTitle: {
     fontFamily: 'Inter',
@@ -235,7 +245,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 8,
     padding: 5,
-    // paddingHorizontal: 10,
     height: 40,
     shadowColor: '#000',
     shadowOffset: {

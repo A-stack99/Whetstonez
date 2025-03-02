@@ -20,13 +20,13 @@ const PaymentSection = ({ style }) => {
       <View style={styles.section}>
         <View style={styles.sectionContent}>
           <View style={styles.header}>
-            <RadioButton selected={selectedMethod === 'card1'} />
+            <RadioButton selected={selectedMethod === 'card1' || selectedMethod === 'card2'} />
             <Text style={styles.headerText}>Credit/ Debit Card</Text>
           </View>
           <View style={styles.cardList}>
             <TouchableOpacity 
               style={styles.cardItem}
-              onPress={() => setSelectedMethod('card1')}
+              onPress={() => setSelectedMethod('card1')} 
             >
               <View style={styles.cardDetails}>
                 <Master style={styles.cardMaster} />
@@ -34,18 +34,20 @@ const PaymentSection = ({ style }) => {
               </View>
               <RadioButton selected={selectedMethod === 'card1'} />
             </TouchableOpacity>
+
             <TouchableOpacity 
               style={styles.cardItem}
-              onPress={() => setSelectedMethod('card2')}
+              onPress={() => setSelectedMethod('card2')} 
             >
               <View style={styles.cardDetails}>
-                <Visa style={styles.cardVisa } />
+                <Visa style={styles.cardVisa} />
                 <Text style={styles.cardNumber}>**** 3456</Text>
               </View>
               <RadioButton selected={selectedMethod === 'card2'} />
             </TouchableOpacity>
+
             <TouchableOpacity style={styles.addCardButton}>
-              <Vector  style={styles.addIcon} />
+              <Vector style={styles.addIcon} />
               <Text style={styles.addCardText}>Add Card</Text>
             </TouchableOpacity>
           </View>
@@ -53,25 +55,26 @@ const PaymentSection = ({ style }) => {
       </View>
       <TouchableOpacity 
         style={styles.section}
-        onPress={() => setSelectedMethod('applePay')}
+        onPress={() => setSelectedMethod('applePay')} 
       >
         <View style={styles.paymentOption}>
           <RadioButton selected={selectedMethod === 'applePay'} />
           <View style={styles.paymentOptionContent}>
             <Text style={styles.paymentText}>Apple Pay</Text>
-            <ApplePay  style={styles.paymentLogo} />
+            <ApplePay style={styles.paymentLogo} />
           </View>
         </View>
       </TouchableOpacity>
+
       <TouchableOpacity 
         style={styles.section}
-        onPress={() => setSelectedMethod('googlePay')}
+        onPress={() => setSelectedMethod('googlePay')} 
       >
         <View style={styles.paymentOption}>
           <RadioButton selected={selectedMethod === 'googlePay'} />
           <View style={styles.paymentOptionContent}>
             <Text style={styles.paymentText}>Google Pay</Text>
-            <GooglePay  style={styles.paymentLogo} />
+            <GooglePay style={styles.paymentLogo} />
           </View>
         </View>
       </TouchableOpacity>
@@ -117,16 +120,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  cardMaster:{
-      width: 70,
-      height: 30,
-      top:5
+  cardMaster: {
+    width: 70,
+    height: 30,
+    top: 5,
   },
   cardVisa: {
     width: 70,
     height: 50,
-    left:-30,
-    top:-15
+    left: -30,
+    top: -15,
   },
   cardNumber: {
     fontFamily: 'Inter',
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#000000',
     marginLeft: -18,
-    top:-4,
+    top: -4,
   },
   addCardButton: {
     flexDirection: 'row',

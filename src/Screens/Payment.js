@@ -52,25 +52,6 @@ const styles = StyleSheet.create({
     height: 48,
     marginBottom: 5,
   },
-  homeIndicator: {
-    width: 375,
-    height: 21,
-  },
-  continueButton: {
-    backgroundColor: '#235AFF',
-    borderRadius: 10,
-    padding: 14,
-    width: '90%',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: -2,
-  },
-  continueButtonText: {
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
 });
 
 export default PaymentScreen;
