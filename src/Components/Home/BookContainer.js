@@ -1,24 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { SET_SERVICES, SELECT_SERVICE } from '../../Redux/Action/ActionType';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import ServiceItem from './ServiceItem';
 import Indicator from '../../assests/Svg/Indicator';
+import { addSubService } from '../../Utils/API_Axios';
 
-const setServices = (services) => ({
-  type: SET_SERVICES,
-  data: services
-});
-
-const selectService = (serviceId) => ({
-  type: SELECT_SERVICE,
-  data: serviceId
-});
-
-const BookContainer = ({ onBookNow = () => {}, onServiceSelect = () => {}, onViewMap = () => {} }) => {
-  const dispatch = useDispatch();
-
-  const { services = [], selectedServiceId } = useSelector((state) => state.services);  
+const BookContainer = ({ onServiceSelect = () => {} }) => {
+  const [services, setServices] = useState([]);
+  const [selectedServiceId, setSelectedServiceId] = useState(1);
+  const [subservices, setSubservices] = useState([]);
 
   useEffect(() => {
     const servicesData = [
@@ -26,94 +15,166 @@ const BookContainer = ({ onBookNow = () => {}, onServiceSelect = () => {}, onVie
         id: 1, 
         name: 'Hair Cut', 
         icon: require('../../assests/Images/haircut.png'), 
-        salon: { 
+        salon: [{ 
           salonName: 'Hair Avenue',
           location: 'Lakewood, California',
           distance: '2 km',
           rating: '4.7',
           reviews: '312',
           imageUrl: require('../../assests/Images/Salon1.png'),
-        }
-      },  
+        },
+        {
+          salonName: 'Urban Chic Salon',
+          location: 'Chicago, Illinois',
+          distance: '1.8 km',
+          rating: '4.8',
+          reviews: '150',
+          imageUrl: require('../../assests/Images/Salon3.png'),
+        },
+        {
+          salonName: 'Shear Elegance',
+          location: 'Seattle, Washington',
+          distance: '5 km',
+          rating: '4.6',
+          reviews: '190',
+          imageUrl: require('../../assests/Images/Salon2.png'),
+        }]
+      },
       { 
         id: 2, 
         name: 'Hair Styling', 
         icon: require('../../assests/Images/style.png'),
-        salon: { 
+        salon: [{ 
           salonName: 'Beauty Bliss',
           location: 'Los Angeles, California',
           distance: '5 km',
           rating: '4.5',
           reviews: '210',
           imageUrl: require('../../assests/Images/Salon2.png'),
-        }
+        },
+        {
+          salonName: 'The Glam Room',
+          location: 'Dallas, Texas',
+          distance: '3.5 km',
+          rating: '4.3',
+          reviews: '245',
+          imageUrl: require('../../assests/Images/Salon1.png'),
+        },
+        {
+          salonName: 'The Hair Loft',
+          location: 'Miami, Florida',
+          distance: '6 km',
+          rating: '4.4',
+          reviews: '275',
+          imageUrl: require('../../assests/Images/Salon3.png'),
+        }]
       },
       { 
         id: 3, 
         name: 'Nail Art', 
         icon: require('../../assests/Images/polish.png'),
-        salon: { 
+        salon: [{ 
           salonName: 'Nail Studio',
           location: 'Hollywood, California',
           distance: '3 km',
           rating: '4.2',
           reviews: '156',
           imageUrl: require('../../assests/Images/Salon3.png'),
-        }
+        },
+        {
+          salonName: 'Glow & Glam',
+          location: 'Miami, Florida',
+          distance: '2.5 km',
+          rating: '4.5',
+          reviews: '185',
+          imageUrl: require('../../assests/Images/Salon2.png'),
+        },
+        {
+          salonName: 'Luxury Nails',
+          location: 'San Francisco, California',
+          distance: '4 km',
+          rating: '4.9',
+          reviews: '320',
+          imageUrl: require('../../assests/Images/Salon1.png'),
+        }]
       },
       { 
         id: 4, 
-        name: 'Hair Cut', 
+        name: 'Hair Drying', 
         icon: require('../../assests/Images/drayer.png'),
-        salon: { 
+        salon: [{ 
           salonName: 'Shine Salon',
           location: 'Santa Monica, California',
           distance: '8 km',
           rating: '4.6',
           reviews: '98',
           imageUrl: require('../../assests/Images/Salon3.png'),
-        }
+        },
+        {
+          salonName: 'Vivid Beauty Lounge',
+          location: 'Santa Monica, California',
+          distance: '5 km',
+          rating: '4.5',
+          reviews: '80',
+          imageUrl: require('../../assests/Images/Salon2.png'),
+        },
+        {
+          salonName: 'Radiant Glow Salon',
+          location: 'Beverly Hills, California',
+          distance: '15 km',
+          rating: '4.9',
+          reviews: '340',
+          imageUrl: require('../../assests/Images/Salon1.png'),
+        }]
       }
     ];
 
-    dispatch(setServices(servicesData)); 
-  }, [dispatch]);
+    setServices(servicesData);
+  }, []);
 
   const handleServiceSelect = (service) => {
-    dispatch(selectService(service.id)); 
-    onServiceSelect(service.id); 
+    setSelectedServiceId(service.id);
+    onServiceSelect(service.id);
+  };
+
+  const addSubServiceToServer = async (subservice) => {
+    try {
+      const response = await addSubService(subservice);
+      console.log('API Response:', response); 
+      if (response.status === 200) {
+        Alert.alert('Success', 'Subservice added successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to add subservice. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error); 
+      Alert.alert('Error', 'An error occurred while adding the subservice.');
+    }
+  };
+
+  const addsubservice = (subservice) => {
+    setSubservices(prevSubservices => {
+      const isAlreadySelected = prevSubservices.some(item => item.salonName === subservice.salonName);
+      if (isAlreadySelected) {
+        return prevSubservices.filter(item => item.salonName !== subservice.salonName);
+      } else {
+        addSubServiceToServer(subservice);  
+        return [...prevSubservices, subservice];
+      }
+    });
   };
 
   const selectedService = services.find(service => service.id === selectedServiceId);
 
   return (
-    <>
-      <View style={[styles.container]}>
-        <View style={styles.promotionBanner}>
-          <View style={styles.ellipseBackground} />
-          <Image source={require('../../assests/Images/homeBG.png')} style={styles.bannerImage} resizeMode="cover" />
-          <View style={styles.bannerOverlay} />
-          <View style={styles.bannerContent}>
-            <Text style={styles.specialText}>Morning Special!</Text>
-            <Text style={styles.discountText}>Get 20% Off</Text>
-            <Text style={styles.descriptionText}>on All Haircuts Between 9-10 AM.</Text>
-            <TouchableOpacity style={styles.bookButton} onPress={onBookNow}>
-              <Text style={styles.bookButtonText}>Book Now</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-
+    <View style={styles.container}>
       <View style={styles.servicesSection}>
         <Text style={styles.sectionTitle}>Services</Text>
         <View style={styles.servicesList}>
           {services.map((service) => (
             <TouchableOpacity
               key={service.id}
-              style={[ 
-                styles.serviceItem,
-                service.id === selectedServiceId && styles.activeServiceItem, 
-              ]}
+              style={[styles.serviceItem, service.id === selectedServiceId && styles.activeServiceItem]}
               onPress={() => handleServiceSelect(service)}
             >
               <Image source={service.icon} style={styles.serviceIcon} />
@@ -127,104 +188,33 @@ const BookContainer = ({ onBookNow = () => {}, onServiceSelect = () => {}, onVie
 
       <View style={styles.nearbySalonsSection}>
         <Text style={styles.sectionTitle}>Nearby Salons</Text>
-        <TouchableOpacity style={styles.viewMapButton} onPress={onViewMap}>
+        <TouchableOpacity style={styles.viewMapButton}>
           <Indicator style={styles.mapIcon} resizeMode="contain" />
           <Text style={styles.viewMapText}>View on Map</Text>
         </TouchableOpacity>
       </View>
 
-      {selectedService && (
-        <ServiceItem 
-          salonName={selectedService.salon.salonName} 
-          location={selectedService.salon.location}
-          distance={selectedService.salon.distance}
-          rating={selectedService.salon.rating} 
-          reviews={selectedService.salon.reviews}
-          imageUrl={selectedService.salon.imageUrl} 
-        />
+      {selectedService && selectedService.salon && selectedService.salon.length > 0 && (
+        <View>
+          {selectedService.salon.map((salon, index) => (
+            <ServiceItem
+              key={index}
+              item={salon}
+              addsubservice={addsubservice} 
+            />
+          ))}
+        </View>
       )}
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderRadius: 2,
-    width: '100%',
-    maxWidth: '100%',  
-    backgroundColor: '#ffffff',
-    marginBottom: 28,
-  },
-  promotionBanner: {
-    width: '92%',
-    height: 'auto',
-    borderRadius: 10,
-    overflow: 'hidden',
-    left:15,
-    justifyContent: 'center',
-  },
-  ellipseBackground: {
-    position: 'absolute',
-    width: 354,
-    height: 354,
-    backgroundColor: 'rgba(35, 90, 255, 0.25)',
-    borderRadius: 177,
-    left: -130,
-    top: -177,
-    zIndex: 1,
-  },
-  bannerImage: {
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-  },
-  bannerOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    zIndex: 2,
-  },
-  bannerContent: {
     padding: 15,
-    zIndex: 3,
-  },
-  specialText: {
-    fontFamily: 'Inter',
-    fontWeight: '800',
-    fontSize: 16,
-    color: '#ffffff',
-    marginBottom: 4,
-  },
-  discountText: {
-    fontFamily: 'Inter',
-    fontWeight: '800',
-    fontSize: 28,
-    color: '#ffffff',
-    marginBottom: 4,
-  },
-  descriptionText: {
-    fontFamily: 'Inter',
-    fontSize: 12,
-    color: '#ffffff',
-    marginBottom: 12,
-  },
-  bookButton: {
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    paddingVertical: 8,
-    paddingHorizontal: 10,
-    alignSelf: 'flex-start',
-    top: -3,
-  },
-  bookButtonText: {
-    fontFamily: 'Inter',
-    fontWeight: '650',
-    fontSize: 12,
-    color: '#0b0c15',
   },
   servicesSection: {
     marginBottom: 60,
-    paddingHorizontal: 10,
   },
   sectionTitle: {
     fontFamily: 'Inter',
@@ -233,24 +223,21 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: '#0B0C15',
     marginBottom: 18,
-    paddingHorizontal:5,
+    paddingHorizontal: 5,
   },
   servicesList: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 5,
   },
   serviceItem: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
     borderRadius: 8,
-    padding: 5,
+    padding: 3,
     height: 40,
     shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 0.5,
@@ -275,25 +262,22 @@ const styles = StyleSheet.create({
   nearbySalonsSection: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent:'space-between',
-    paddingHorizontal:12,
-    top:-25,
+    justifyContent: 'space-between',
   },
   viewMapButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    top: -9,
   },
   mapIcon: {
     width: 16,
     height: 16,
+    marginRight: 5,
   },
   viewMapText: {
     fontFamily: 'Inter',
     fontWeight: '600',
-    fontSize: 12,
-    color: '#235aff',
+    fontSize: 14,
+    color: '#0066ff',
   },
 });
 

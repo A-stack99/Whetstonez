@@ -23,7 +23,8 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f8f8f8',
+    // backgroundColor: '#f8f8f8',
+    backgroundColor:'#f8f8',
     padding: 40,
     justifyContent: 'center',
   },

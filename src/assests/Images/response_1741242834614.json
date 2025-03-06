@@ -1,0 +1,54 @@
+{
+  "success": true,
+  "data": {
+    "data": {
+      "id": 2,
+      "name": "Hair Cut",
+      "description": "Hair Cut",
+      "price": 1000,
+      "duration": 40,
+      "status": true,
+      "isDeleted": false,
+      "createdAt": "2025-03-06T06:33:54.530Z",
+      "updatedAt": "2025-03-06T06:33:54.530Z",
+      "salonId": 1,
+      "categoryId": 1,
+      "Categories": {
+        "id": 1,
+        "name": "Salon",
+        "isDeleted": false,
+        "createdAt": "2025-03-03T05:37:15.008Z",
+        "updatedAt": "2025-03-03T05:37:15.008Z"
+      },
+      "Salon": {
+        "id": 1,
+        "name": "ibraheem",
+        "userName": "S2500001",
+        "ownerName": "ibraheem",
+        "email": "ibraheem@gmail.com",
+        "password": "NmZlYmI0ZjVjZTE1MmFhZWExZjAxOThiOWYxYmY2MWE=",
+        "status": true,
+        "phoneNumber": "03240",
+        "address": "lahore",
+        "passwordResetOTP": null,
+        "passwordResetExpires": null,
+        "topRanked": true,
+        "rank": null,
+        "isDeleted": true,
+        "createdAt": "2025-03-03T05:41:01.337Z",
+        "updatedAt": "2025-03-04T09:03:15.077Z",
+        "rolesId": 3,
+        "categoryId": 0,
+        "fileId": null
+      },
+      "category": {
+        "id": 1,
+        "name": "Salon"
+      },
+      "salon": {
+        "id": 1,
+        "name": "ibraheem"
+      }
+    }
+  }
+}

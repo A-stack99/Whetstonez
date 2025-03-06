@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -13,27 +13,62 @@ import Button from "../Components/SignIn/Button";
 import Apple from "../assests/Svg/Apple";
 import Google from "../assests/Svg/Google";
 import CustomStatusBar from "../Components/StatusBar";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import { AxiosPostRequest } from "../Utils/API_Axios";
 
 const validationSchema = Yup.object({
-  input: Yup.string()
-    .required("Email or phone number is required")
-    .test('is-email-or-phone', 'Please enter a valid email or phone number', value => {
-  
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const phoneRegex = /^[0-9]{10}$/;
-      return emailRegex.test(value) || phoneRegex.test(value); 
-    })
+  email: Yup.string()
+    .required("Email is required")
+    .email("Invalid email format"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters"),
 });
 
+const SignIn = () => {
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => setError(null), 5000); 
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
-  const SignIn = () => {
-    const navigation = useNavigation();
+  const handleSubmit = async (values) => {
+    setLoading(true);
+    setError(null);
 
-    const handleSubmit = () => {
-      navigation.navigate('VerifyScreen');
-   };
+    try {
+      const response = await AxiosPostRequest({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (response.status === 200) {
+        console.log("Form Submitted: ", values.email);
+        navigation.navigate("VerifyScreen");
+      } else {
+        setError("Something went wrong, please try again!");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        if (error.response.status === 503) {
+          setError("The server is temporarily unavailable. Please try again later.");
+        } else {
+          setError(`An error occurred: ${error.response.status}. Please try again later.`);
+        }
+      } else if (error.request) {
+        setError("Network error. Please check your internet connection and try again.");
+      } 
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ImageBackground
       source={require("../assests/Images/SalonBg.png")}
@@ -45,34 +80,55 @@ const validationSchema = Yup.object({
         <Text style={styles.heading}>Book Your Perfect {"\n"}Look in Minutes!</Text>
 
         <Formik
-          initialValues={{ input: "" }}
+          initialValues={{ email: "", password: "" }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            alert(`Form submitted with: ${values.input}`);
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ handleChange, handleBlur,  values, errors, touched, isValid, dirty }) => (
+          {({
+            handleChange,
+            handleBlur,
+            values,
+            errors,
+            touched,
+            isValid,
+            dirty,
+            handleSubmit,
+          }) => (
             <>
               <TextInput
-                placeholder="Enter your email or phone number"
+                placeholder="Enter your email"
                 placeholderTextColor="#A0A0A0"
                 style={styles.input}
-                value={values.input}
-                onChangeText={handleChange("input")}
-                onBlur={handleBlur("input")}
+                value={values.email}
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
               />
-              {touched.input && errors.input && (
-                <Text style={styles.errorText}>{errors.input}</Text>
+              {touched.email && errors.email && (
+                <Text style={styles.errorText}>{errors.email}</Text>
               )}
 
+              <TextInput
+                placeholder="Enter your password"
+                placeholderTextColor="#A0A0A0"
+                style={styles.input}
+                secureTextEntry={true}
+                value={values.password}
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+              />
+              {touched.password && errors.password && (
+                <Text style={styles.errorText}>{errors.password}</Text>
+              )}
+
+              {error && <Text style={styles.errorText}>{error}</Text>}
+
               <Button
-              onPress={handleSubmit}
-                title="Continue"
+                onPress={handleSubmit}
+                title={loading ? "Loading..." : "Continue"}
                 style={styles.button}
                 textStyle={styles.buttonText}
-                disabled={!isValid || !dirty} 
+                disabled={!isValid || !dirty || loading}
               />
-
               <Text style={styles.orText}>Or</Text>
               <TouchableOpacity style={styles.appleButton}>
                 <Apple style={styles.apple} />
@@ -102,6 +158,7 @@ const validationSchema = Yup.object({
     </ImageBackground>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -115,7 +172,7 @@ const styles = StyleSheet.create({
     width: "95%",
     height: "50%",
     alignSelf: "center",
-    bottom: -180,
+    bottom: -110,
   },
   heading: {
     color: "#ffffff",

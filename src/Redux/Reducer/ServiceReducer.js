@@ -1,6 +1,7 @@
 
 import { SET_SERVICES , SELECT_SERVICE } from "../Action/ActionType";
 
+
 const initialState = {
   services: [],
   selectedServiceId: null,
@@ -22,6 +23,8 @@ export const servicesReducer = (state = initialState, action) => {
       return state;
   }
 };
+
+
 
 
 

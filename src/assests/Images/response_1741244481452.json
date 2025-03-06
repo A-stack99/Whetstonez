@@ -1,0 +1,34 @@
+{
+  "success": true,
+  "data": {
+    "data": {
+      "id": 1,
+      "name": "Hair Cut",
+      "price": 1000,
+      "description": "Hair treatment ",
+      "duration": 40,
+      "status": true,
+      "isDeleted": false,
+      "createdAt": "2025-03-06T07:01:21.370Z",
+      "updatedAt": "2025-03-06T07:01:21.370Z",
+      "serviceId": 1,
+      "Service": {
+        "id": 1,
+        "name": "Hair Cut",
+        "description": "Hair Cut",
+        "price": 1000,
+        "duration": 40,
+        "status": true,
+        "isDeleted": false,
+        "createdAt": "2025-03-06T06:31:16.377Z",
+        "updatedAt": "2025-03-06T06:31:16.377Z",
+        "salonId": 1,
+        "categoryId": 1
+      },
+      "service": {
+        "id": 1,
+        "name": "Hair Cut"
+      }
+    }
+  }
+}

@@ -1,62 +1,92 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import CustomStatusBar from '../Components/StatusBar';
 import Button from '../Components/CustomButton';
+
 const VerifyScreen = ({ phoneNumber = "071***05", navigation }) => {
   const [code, setCode] = useState(['', '', '', '']);
 
   const handleCodeChange = (text, index) => {
+    const numericText = text.replace(/[^0-9]/g, ''); 
     const newCode = [...code];
-    newCode[index] = text;
+    newCode[index] = numericText;
     setCode(newCode);
-    
-    if (text && index < 3) {
+
+    if (numericText && index < 3) {
       inputs[index + 1].focus();
     }
   };
 
   const inputs = [];
 
+  const validationSchema = Yup.object().shape({
+    otp: Yup.array().of(Yup.string().length(1, 'Must be a single digit').required('OTP is required')),
+  });
+
   return (
-    <View style={styles.container}>
-      <CustomStatusBar 
-          backgroundColor="#FFFFFF"  
-          barStyle="dark-content"    
-        />
-      
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <CustomStatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+
       <View style={styles.content}>
         <Text style={styles.title}>Verify Your Identity</Text>
         <Text style={styles.subtitle}>
           We've sent a 4-digit code to {phoneNumber}.{'\n'} Please enter it below.
         </Text>
 
-        <View style={styles.otpContainer}>
-          {[0, 1, 2, 3].map((index) => (
-            <TextInput
-              key={index}
-              ref={(input) => inputs[index] = input}
-              style={styles.otpInput}
-              maxLength={1}
-              keyboardType="numeric"
-              value={code[index]}
-              onChangeText={(text) => handleCodeChange(text, index)}
-            />
-          ))}
-        </View>
+        <Formik
+          initialValues={{ otp: ['', '', '', ''] }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            navigation.navigate('Home');
+          }}
+        >
+          {({ values, errors, touched, handleChange, handleSubmit }) => (
+            <>
+              <View style={styles.otpContainer}>
+                {[0, 1, 2, 3].map((index) => (
+                  <View key={index} style={{ alignItems: 'center' }}>
+                    <TextInput
+                      ref={(input) => inputs[index] = input}
+                      style={styles.otpInput}
+                      maxLength={1}
+                      keyboardType="numeric"
+                      value={values.otp[index]}
+                      onChangeText={(text) => {
+                        handleCodeChange(text, index); 
+                        handleChange(`otp[${index}]`)(text);
+                      }}
+                    />
+                  </View>
+                ))}
+              </View>
 
-        <TouchableOpacity >
-          <Text style={styles.resendText}>
-            Didn't receive a code? <Text style={styles.resendLink}>Resend</Text>
-          </Text>
-        </TouchableOpacity>
+              {touched.otp && errors.otp && (
+                <Text style={styles.errorText}>{errors.otp[0]}</Text>
+              )}
+
+              <TouchableOpacity>
+                <Text style={styles.resendText}>
+                  Didn't receive a code? <Text style={styles.resendLink}>Resend</Text>
+                </Text>
+              </TouchableOpacity>
+
+              <Button
+                title={'Continue'}
+                style={styles.continueButton}
+                textStyle={styles.continueButtonText}
+                onPress={handleSubmit}
+                disabled={Object.values(errors).some((error) => error)}
+              />
+            </>
+          )}
+        </Formik>
       </View>
-      <Button
-      title={'Continue'}
-      style={styles.continueButton}
-      textStyle={styles.continueButtonText}
-      onPress={()=> navigation.navigate('Home')}
-      />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -66,8 +96,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   content: {
+    flex: 1,
     alignItems: 'center',
     marginTop: 60,
+    paddingBottom: 24, 
   },
   title: {
     fontFamily: 'Inter',
@@ -117,14 +149,20 @@ const styles = StyleSheet.create({
     padding: 14,
     width: '90%',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: -2,
+    justifyContent: 'center',
+    position:'static',
+    marginTop: 450, 
   },
   continueButtonText: {
     fontFamily: 'Inter',
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 

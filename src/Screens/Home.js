@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TextInput,
@@ -14,8 +14,9 @@ import Bottom from '../Components/Home/Bottom';
 import CustomStatusBar from '../Components/StatusBar';
 import SearchBar from '../Components/Home/Search';
 import SearchResult from '../Components/Home/SearchResults';
+import ImageBanner from '../Components/Home/ImageBanner';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchResults = [
@@ -53,45 +54,57 @@ const Home = ({navigation}) => {
     },
   ];
 
-  const filteredResult = searchResults.filter(result =>
-    result.salonName.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const filteredResult = searchQuery
+    ? searchResults.filter(result =>
+        result.salonName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : []; 
 
-  return (
-    <View style={styles.container}>
-      <CustomStatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-      <Header />
-      <View style={styles.searchSection}>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+    return (
+      <View style={styles.container}>
+        <CustomStatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+        <Header />
+        <View style={styles.searchSection}>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          <ImageBanner />
+          {!searchQuery && <BookContainer />}
+          {searchQuery && filteredResult.length === 0 && (
+            <Text style={styles.noResultsText}>No results found</Text>
+          )}
+          {filteredResult.map((result, index) => (
+            <TouchableOpacity onPress={() => navigation.navigate('SalonDetail')} key={index}>
+              <SearchResult result={result} />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <Bottom />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <BookContainer />
-        {filteredResult.map((result, index) => (
-          <TouchableOpacity
-          onPress={() => navigation.navigate('SalonDetail')}>
-          <SearchResult key={index} result={result} />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <Bottom />
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    minHeight: '100%',
-    width: '100%',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  searchSection: {
-    width: '100%',
-    paddingHorizontal: 20,
-    backgroundColor: '#FFFFFF',
-  },
-});
+    );
+  };
+  
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      width: '100%',
+      flexDirection: 'column',
+    },
+    searchSection: {
+      width: '100%',
+      paddingHorizontal: 16, 
+      backgroundColor: '#FFFFFF',
+    },
+    scrollContent: {
+      flexGrow: 1, 
+      paddingHorizontal: 16, 
+    },
+    noResultsText: {
+      fontSize: 16,
+      color: '#888',
+      textAlign: 'center',
+      marginTop: 20,
+    },
+  });
 
 export default Home;

@@ -3,24 +3,23 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Locator from '../../assests/Svg/Locator';
 import Star from '../../assests/Svg/Start';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../Redux/Action/Action';
 
-const ServiceItem = ({ item, addsubservice }) => {
+const ServiceItem = ({ item }) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  const handleBookSalon = (item) => {
-    console.log('Booking Salon', item);
-    addsubservice(item); 
+  const handleAddToCart = (item) => {
+    console.log('Add to Cart', item);
+    dispatch(addToCart(item)); // Dispatching the addToCart action
   };
-
-  if (!item) {
-    return null;
-  }
 
   return (
     <View>
       <TouchableOpacity
         style={styles.card}
-        onPress={() => navigation.navigate('SalonDetail', { salonId: item.id })}
+        onPress={() => navigation.navigate('SalonDetail', { salonId: item.id })} // Example passing item.id to navigate
       >
         <View style={styles.container}>
           <Image source={item.imageUrl} style={styles.salonImage} resizeMode="contain" />
@@ -42,8 +41,8 @@ const ServiceItem = ({ item, addsubservice }) => {
               </Text>
             </View>
 
-            <TouchableOpacity onPress={() => handleBookSalon(item)} style={styles.bookSalonButton}>
-              <Text style={styles.bookSalonText}>Add to Booking</Text>
+            <TouchableOpacity onPress={() => handleAddToCart(item)} style={styles.addToCartButton}>
+              <Text style={styles.addToCartText}>Add to Cart</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -51,20 +50,6 @@ const ServiceItem = ({ item, addsubservice }) => {
     </View>
   );
 };
-
-ServiceItem.defaultProps = {
-  item: {
-    salonName: 'Hair Avenue',
-    location: 'Lakewood, California',
-    distance: '2 km',
-    rating: '4.7',
-    reviews: '312',
-    imageUrl: require('../../assests/Images/Salon1.png'),
-    id: 0,
-  },
-};
-
-
 
 const styles = StyleSheet.create({
   card: {
@@ -148,13 +133,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     marginLeft: 4,
   },
-  bookSalonButton: {
+  addToCartButton: {
     marginTop: 10,
     backgroundColor: '#235aff',
     padding: 8,
     borderRadius: 5,
   },
-  bookSalonText: {
+  addToCartText: {
     color: '#fff',
     fontWeight: '600',
     textAlign: 'center',

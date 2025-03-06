@@ -1,0 +1,29 @@
+{
+  "success": true,
+  "data": {
+    "data": {
+      "id": 17,
+      "name": "Hair Avenue",
+      "phoneNumber": "12345",
+      "email": "string",
+      "userName": "S2500017",
+      "address": "string",
+      "ownerName": "Anam",
+      "topRanked": true,
+      "rank": "1st",
+      "status": true,
+      "createdAt": "2025-03-06T09:44:06.580Z",
+      "updatedAt": "2025-03-06T09:44:06.580Z",
+      "categoryId": 1,
+      "roleId": 3,
+      "category": {
+        "id": 1,
+        "name": "Salon"
+      },
+      "role": {
+        "id": 3,
+        "name": "Salon"
+      }
+    }
+  }
+}

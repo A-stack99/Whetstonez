@@ -11,15 +11,38 @@ const Products = ({ style }) => {
   const [selectedServices, setSelectedServices] = useState([]);
 
   const tabs = [
-    { name: 'Hair Cut', price: '$10.00', duration: '30 Mins' },
-    { name: 'Hair Styling', price: '$20.00', duration: '45 Mins' },
-    { name: 'Hair Treatments', price: '$15.00', duration: '40 Mins' },
-    { name: 'Combo', price: '$25.00', duration: '60 Mins' },
-  ];
-
-  const services = [
-    { name: 'Hair Wash', price: '$5.00', duration: '30 Mins' },
-    { name: 'Hair Cut', price: '$10.00', duration: '30 Mins' },
+    {
+      name: 'Hair Cut',
+      services: [
+        { name: 'Hair Wash', price: '$5.00', duration: '30 Mins' },
+        { name: 'Hair Cut', price: '$10.00', duration: '30 Mins' },
+        { name: 'Hair Trim', price: '$7.00', duration: '20 Mins' }, 
+      ],
+    },
+    {
+      name: 'Hair Styling',
+      services: [
+        { name: 'Hair Styling', price: '$20.00', duration: '45 Mins' },
+        { name: 'Blow Dry', price: '$18.00', duration: '35 Mins' }, 
+        { name: 'Curling', price: '$25.00', duration: '50 Mins' }, 
+      ],
+    },
+    {
+      name: 'Combo',
+      services: [
+        { name: 'Combo', price: '$25.00', duration: '60 Mins' },
+        { name: 'Hair Cut & Styling Combo', price: '$30.00', duration: '75 Mins' }, 
+        { name: 'Shampoo & Blow Dry Combo', price: '$20.00', duration: '50 Mins' }, 
+      ],
+    },
+    {
+      name: 'Hair Treatments',  
+      services: [
+        { name: 'Hair Treatments', price: '$15.00', duration: '40 Mins' },
+        { name: 'Deep Conditioning', price: '$25.00', duration: '60 Mins' }, 
+        { name: 'Keratin Treatment', price: '$50.00', duration: '90 Mins' }, 
+      ],
+    },
   ];
 
   const toggleService = (serviceName) => {
@@ -43,10 +66,7 @@ const Products = ({ style }) => {
           style={styles.tabButton}
         >
           <Text
-            style={[
-              styles.tabText,
-              activeTab === item.name ? styles.activeTabText : styles.inactiveTabText,
-            ]}
+            style={[styles.tabText, activeTab === item.name ? styles.activeTabText : styles.inactiveTabText]}
           >
             {item.name}
           </Text>
@@ -61,46 +81,32 @@ const Products = ({ style }) => {
   return (
     <View style={[styles.container, style]}>
       <TabList tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
-      <View style={styles.detailsContainer}>
-        <Text style={styles.tabDetailsTitle}>{activeTabDetails.name}</Text>
-        <View style={styles.durationContainer}>
-          <Text style={styles.detailsText}>{activeTabDetails.price}</Text>
-          <Time style={styles.timeIcon} />
-          <Text style={styles.detailsText}>{activeTabDetails.duration}</Text>
-        </View>
-        <TouchableOpacity
-  onPress={() => toggleService(activeTabDetails.name)}
-  style={styles.iconButton} 
->
-  {isServiceSelected(activeTabDetails.name) ? (
-    <BlueTick style={[styles.serviceIcon]} />
-  ) : (
-    <Plus style={styles.serviceIcon} />
-  )}
-</TouchableOpacity>
-      </View>
 
-      {services.map((service, index) => (
-        <View key={index} style={styles.serviceCard}>
-          <View style={styles.serviceContent}>
-            <Text style={styles.serviceName}>{service.name}</Text>
-            <View style={styles.serviceDetails}>
-              <Text style={styles.servicePrice}>{service.price}</Text>
-              <View style={styles.durationContainer}>
-                <Time style={styles.timeIcon} />
-                <Text style={styles.serviceDuration}>{service.duration}</Text>
+      {activeTabDetails && (
+        <View style={styles.detailsContainer}>
+          {activeTabDetails.services.map((service, index) => (
+            <View key={index} style={styles.serviceCard}>
+              <View style={styles.serviceContent}>
+                <Text style={styles.serviceName}>{service.name}</Text>
+                <View style={styles.serviceDetails}>
+                  <Text style={styles.servicePrice}>{service.price}</Text>
+                  <View style={styles.durationContainer}>
+                    <Time style={styles.timeIcon} />
+                    <Text style={styles.serviceDuration}>{service.duration}</Text>
+                  </View>
+                </View>
               </View>
+              <TouchableOpacity onPress={() => toggleService(service.name)} style={styles.iconButton}>
+                {isServiceSelected(service.name) ? (
+                  <BlueTick style={styles.serviceIcon} />
+                ) : (
+                  <Plus style={styles.serviceIcon} />
+                )}
+              </TouchableOpacity>
             </View>
-          </View>
-          <TouchableOpacity onPress={() => toggleService(service.name)}>
-            {isServiceSelected(service.name) ? (
-              <BlueTick style={styles.serviceIcon} />
-            ) : (
-              <Plus style={styles.serviceIcon} />
-            )}
-          </TouchableOpacity>
+          ))}
         </View>
-      ))}
+      )}
 
       {selectedServices.length > 0 && (
         <TouchableOpacity
@@ -122,7 +128,7 @@ const Products = ({ style }) => {
           borderRadius: 1,
           width: '35%',
           alignSelf: 'center',
-          bottom: -30,
+          bottom: -52,
         }}
       />
     </View>
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
   tabListContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 5,
+    // marginBottom: 15,
     gap: 5,
   },
   tabButton: {
@@ -164,44 +170,16 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   detailsContainer: {
-    marginHorizontal: 12,
-    marginBottom: -12,
-  },
-  tabDetailsTitle: {
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#0b0c15',
-    marginBottom: 4,
-  },
-  detailsText: {
-    fontFamily: 'Inter',
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#939393',
-    lineHeight: 19.6,
-  },
-  durationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  timeIcon: {
-    width: 14,
-    height: 14,
-    marginLeft: 4,
   },
   serviceCard: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingVertical: 8,
     backgroundColor: '#ffffff',
     borderRadius: 10,
     width: '100%',
-    marginBottom: 10,
-    marginTop: -30,
   },
   serviceContent: {
     gap: 2,
@@ -217,7 +195,6 @@ const styles = StyleSheet.create({
   serviceDetails: {
     flexDirection: 'row',
     gap: 16,
-    marginTop: 4,
   },
   servicePrice: {
     fontFamily: 'Inter',
@@ -234,15 +211,22 @@ const styles = StyleSheet.create({
     lineHeight: 19.6,
     marginLeft: 4,
   },
+  durationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  timeIcon: {
+    width: 14,
+    height: 14,
+    marginLeft: 4,
+  },
   iconButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: 40, 
-    height: 40, 
-    marginLeft:293,
-    top:-40
+    width: 40,
+    height: 40,
   },
-
   serviceIcon: {
     width: 22,
     height: 22,
@@ -256,7 +240,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginTop: -15,
     position: 'absolute',
-    bottom: -20,
+    bottom: -40,
   },
   buttonText: {
     fontFamily: 'Inter',
